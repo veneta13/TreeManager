@@ -1,6 +1,7 @@
 #ifndef TREEMANAGER_TREE_H
 #define TREEMANAGER_TREE_H
 
+#include <algorithm>
 #include <vector>
 #include <iostream>
 
@@ -18,12 +19,22 @@ class Tree {
 
         /// Default constructor
         Node() = default;
+
+        bool operator<(Node const& other) const;
+        bool operator>(Node const& other) const;
+        bool operator==(Node const& other) const;
     };
 
     /// The root of the tree
     Node* root;
 
+    void clear(Node* currentRoot);
+    Node* getChild(Node* parent, int value) const;
+
+    friend bool helperSort(Node* a, Node* b);
     void sortChildren(Node* currentRoot);
+
+    bool equalSubtrees(const Node* rootA, const Node* rootB);
 
 public:
     Tree();
@@ -33,7 +44,7 @@ public:
 
     void read(std::istream& in);
 
-    void containsSubtree(const Tree* subtree);
+    void containsSubtree(const Tree* subtree) const;
     void removeSubtree(const Tree* subtree);
 };
 
