@@ -29,6 +29,25 @@ const char* tree4 = "| -2 |\n"
                     "| -11 | |\n"
                     "| |\n";
 
+const char* tree5 = "| 8 |\n"
+                    "| 3 2 9 |\n"
+                    "| 2 | 8 6 | 2 |\n"
+                    "| 8 6 | 11 | 12 | 8 5 |\n"
+                    "| 11 | 4 3 | 5 | 5 8 1 | 11 | 6 |\n"
+                    "| | | | | | | | | |\n";
+
+const char* tree6 = "| 2 |\n"
+                    "| 8 6 |\n"
+                    "| 11 | 12 |\n"
+                    "| | |\n";
+
+const char* tree7 = "| 8 |\n"
+                    "| 3 19 9 |\n"
+                    "| 2 | | 2 |\n"
+                    "| 8 6 | 8 5 |\n"
+                    "| 11 | 4 3 | 11 | 6 |\n"
+                    "| | | | | |\n";
+
 TEST_CASE("Read and write")
 {
     SECTION("Tree 1")
@@ -215,6 +234,62 @@ TEST_CASE("Subtree")
 
         REQUIRE(std::strcmp(output1.str().c_str(), "No, such subtree does not exist!\n") == 0);
         REQUIRE(std::strcmp(output2.str().c_str(), "No, such subtree does not exist!\n") == 0);
+    }
+}
+
+TEST_CASE("Remove tree")
+{
+    SECTION("Remove tree 2 from tree 1")
+    {
+        const char* answer = "New Tree:\n"
+                             "| 8 |\n"
+                             "| 3 12 9 |\n"
+                             "| 7 | | 2 |\n"
+                             "| | 8 5 |\n"
+                             "| 11 | 6 |\n"
+                             "| | |\n";
+
+        Tree t1, t2, t3;
+
+        std::stringstream input1(tree1), input2(tree2), input3(tree3), output1, output2, output3;
+
+        input1 >> t1;
+        input2 >> t2;
+        input3 >> t3;
+
+        t1.removeSubtree(output1, &t2);
+        output2 << t1;
+        output3 << t3;
+
+        REQUIRE(std::strcmp(output1.str().c_str(), answer) == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), output3.str().c_str()) == 0);
+    }
+
+    SECTION("Remove tree 6 from tree 5")
+    {
+        const char* answer = "New Tree:\n"
+                             "| 8 |\n"
+                             "| 3 19 9 |\n"
+                             "| 2 | | 2 |\n"
+                             "| 8 6 | 8 5 |\n"
+                             "| 11 | 4 3 | 11 | 6 |\n"
+                             "| | | | | |\n";
+
+        Tree t1, t2, t3;
+
+        std::stringstream input1(tree5), input2(tree6), input3(tree7), output1, output2, output3;
+
+        input1 >> t1;
+        input2 >> t2;
+        input3 >> t3;
+
+        t1.removeSubtree(output1, &t2);
+        output2 << t1;
+        output3 << t3;
+
+        REQUIRE(std::strcmp(output1.str().c_str(), answer) == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), output3.str().c_str()) == 0);
+
     }
 }
 
