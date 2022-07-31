@@ -54,10 +54,12 @@ public: // TODO remove line
     bool printChildren(std::ostream &out, Node *parent) const;
     bool printLevel(std::ostream &out, vector<Node *> &nodes) const;
 
-    bool helperSubtree(bool remove, const Tree* subtree);
-    bool equalSubtrees(Node const *currentRoot, Node const *otherRoot);
-
+    int currentNodeSubtree(Node const *currentRoot, Node const *subtreeRoot);
     Node* findSubtree(Node* currentRoot, Node* rootToFind);
+
+    void removeCurrent(Node *currentRoot, Node *subtreeRoot);
+
+    bool helperSubtree(bool shouldRemove, const Tree* subtree);
 
 public:
     Tree();
@@ -71,6 +73,10 @@ public:
 
     friend std::istream& operator>>(std::istream& in, Tree& t);
     friend std::ostream& operator<<(std::ostream& out, Tree const& t);
+
+    int sumChildren(Node const *parent);
+
+    int sumSubtree(Node const *currentRoot, Node const *subtreeRoot);
 };
 
 
