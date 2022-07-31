@@ -76,4 +76,51 @@ TEST_CASE("Read and write")
     }
 }
 
+TEST_CASE("Subtree - self")
+{
+    SECTION("Tree 1")
+    {
+        Tree t;
+        std::stringstream input(tree1), output;
+
+        input >> t;
+        t.containsSubtree(output, &t);
+
+        REQUIRE(std::strcmp(output.str().c_str(), "Yes, there is such subtree!\n") == 0);
+    }
+
+    SECTION("Tree 2")
+    {
+        Tree t;
+        std::stringstream input(tree2), output;
+
+        input >> t;
+        t.containsSubtree(output, &t);
+
+        REQUIRE(std::strcmp(output.str().c_str(), "Yes, there is such subtree!\n") == 0);
+    }
+
+    SECTION("Tree 3")
+    {
+        Tree t;
+        std::stringstream input(tree3), output;
+
+        input >> t;
+        t.containsSubtree(output, &t);
+
+        REQUIRE(std::strcmp(output.str().c_str(), "Yes, there is such subtree!\n") == 0);
+    }
+
+    SECTION("Tree 4")
+    {
+        Tree t;
+        std::stringstream input(tree4), output;
+
+        input >> t;
+        t.containsSubtree(output, &t);
+
+        REQUIRE(std::strcmp(output.str().c_str(), "Yes, there is such subtree!\n") == 0);
+    }
+}
+
 #pragma clang diagnostic pop
