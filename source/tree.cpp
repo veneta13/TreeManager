@@ -166,6 +166,7 @@ int Tree::readInteger(std::istream& in) const {
     return number;
 }
 
+
 /// Read all children of a node
 /// \param in stream to read from
 /// \param parent parent node to add children to
@@ -194,13 +195,10 @@ void Tree::readChildren(std::istream& in, Node* parent) const {
 }
 
 
-/// Read and move reading to next nodes' children
-/// \param in stream to read from
-/// \param nodes vector to update with next nodes
-void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) const {
+/// Move to children of current nodes
+/// \param nodes current nodes
+void Tree::moveToNextLevel(vector<Node*>& nodes) const {
     vector<Node*> temp;
-
-    readLine(in, nodes); // read child nodes of parents
 
     for (int i = 0; i < nodes.size(); i++) {
         for (int j = 0; j < nodes[i]->children.size(); j++) {
@@ -212,6 +210,15 @@ void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) const {
 }
 
 
+/// Read and move reading to next nodes' children
+/// \param in stream to read from
+/// \param nodes vector to update with next nodes
+void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) const {
+    readLine(in, nodes); // read child nodes of parents
+    moveToNextLevel(nodes);
+}
+
+
 /// Reads information for all nodes on a level and saves them
 /// \param in stream to read from
 /// \param parents parent nodes
@@ -219,6 +226,9 @@ void Tree::readLine(std::istream& in, vector<Node*>& parents) const {
     char c = ' ';
     while ( c == ' ') {
         c = (char)(in.get());
+    }
+    if(in.eof()) {
+        return;
     }
 
     if (c != '|') {
@@ -236,6 +246,47 @@ void Tree::readLine(std::istream& in, vector<Node*>& parents) const {
     getline(in, str); // move on to the next line
 }
 
+
+/// Print children of node
+/// \param out output stream
+/// \param parent parent of the nodes to print
+/// \return if the node has any children
+bool Tree::printChildren(std::ostream &out, Node* parent) const {
+    for (int i = 0; i < parent->children.size(); i++) {
+        out << " " << parent->children[i]->value;
+    }
+    out << " |";
+
+    return parent->children.empty();
+}
+
+
+/// Print tree level
+/// \param out output stream
+/// \param nodes nodes on the current level
+/// \return if there are any more levels under this one
+bool Tree::printLevel(std::ostream &out, vector<Node *>& nodes) const {
+    bool nextLine = false;
+
+    out << "|";
+
+    for (int i = 0; i < nodes.size(); i++) {
+        if (!printChildren(out, nodes[i])) {
+            nextLine = true;
+        }
+    }
+    out << "\n";
+
+    moveToNextLevel(nodes);
+
+    return nextLine;
+}
+
+
+/// Stream extraction operator
+/// \param in input stream
+/// \param t tree to input
+/// \return updated input stream
 std::istream &operator>>(std::istream &in, Tree& t) {
     vector<Tree::Node*> nodes;
     nodes.push_back(t.root);
@@ -249,5 +300,21 @@ std::istream &operator>>(std::istream &in, Tree& t) {
     t.root = t.root->children[0];
     t.root->parent = nullptr;
     delete temp;
+
+    return in;
+}
+
+
+/// Stream insertion operator
+/// \param out output stream
+/// \param w tree to output
+/// \return the stream with table information inserted
+std::ostream &operator<<(std::ostream &out, Tree const& t) {
+    vector<Tree::Node*> nodes;
+    nodes.push_back(t.root);
+
+    out << "| " << t.root->value << " |\n";
+    while (t.printLevel(out, nodes)) ;
+    return out;
 }
 

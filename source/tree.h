@@ -45,10 +45,14 @@ public: // TODO remove line
 
     bool equalSubtrees(const Node* rootA, const Node* rootB);
 
+    void moveToNextLevel(vector<Node *> &nodes) const;
+
     int readInteger(std::istream &in) const;
     void readChildren(std::istream& in, Node* parent) const;
     void readLine(std::istream &in, vector<Node *> &parents) const;
     void readLineAndUpdate(std::istream &in, vector<Node *> &nodes) const;
+
+    bool printLevel(std::ostream &out, vector<Node *> &nodes) const;
 
 public:
     Tree();
@@ -61,6 +65,9 @@ public:
     void removeSubtree(const Tree* subtree);
 
     friend std::istream& operator>>(std::istream& in, Tree& t);
+    friend std::ostream& operator<<(std::ostream& out, Tree const& t);
+
+    bool printChildren(std::ostream &out, Node *parent) const;
 };
 
 
