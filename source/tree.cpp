@@ -288,7 +288,6 @@ bool Tree::printLevel(std::ostream &out, vector<Node *>& nodes) const {
     bool nextLine = false;
 
     out << "|";
-
     for (int i = 0; i < nodes.size(); i++) {
         if (!printChildren(out, nodes[i])) {
             nextLine = true;
@@ -299,6 +298,92 @@ bool Tree::printLevel(std::ostream &out, vector<Node *>& nodes) const {
     moveToNextLevel(nodes);
 
     return nextLine;
+}
+
+
+/// Check if the searched for subtree begins at the current node
+/// \param currentRoot current node in tree
+/// \param otherRoot root of subtree
+/// \return if the searched for subtree begins at the current node
+bool Tree::equalSubtrees(const Node* currentRoot, const Node* otherRoot) {
+    if ((!currentRoot && !otherRoot) || !otherRoot) {
+        return true;
+    }
+    if (!currentRoot) {
+        return false;
+    }
+    if (currentRoot->value != otherRoot->value) {
+        return false;
+    }
+
+    // TODO can be optimised for sorted arrays
+    bool found = true;
+    for (int i = 0; i < otherRoot->children.size(); i++) {
+        found = false;
+
+        for (int j = 0; j < currentRoot->children.size(); j++) {
+            if (equalSubtrees(currentRoot->children[j], otherRoot->children[i])) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) { break; }
+    }
+
+    return found;
+}
+
+
+/// Find subtree in current tree
+/// \param currentRoot root of tree to search in
+/// \param rootToFind root of tree to search for
+/// \return root of subtree
+Tree::Node * Tree::findSubtree(Node* currentRoot, Node* rootToFind) {
+    if (!rootToFind || !currentRoot) { return nullptr; }
+
+    // TODO sort for faster operations
+
+    Node* subtreeRoot; // root of found subtree
+
+    for (int i = 0; i < currentRoot->children.size(); i++) {
+        subtreeRoot = findSubtree(currentRoot->children[i], rootToFind);
+        if (subtreeRoot) {
+            return subtreeRoot;
+        }
+    }
+
+    if (equalSubtrees(currentRoot, rootToFind)) {
+        return currentRoot;
+    }
+
+    return nullptr;
+}
+
+
+/// Helper for subtree operations
+/// \param remove if the found subtrees must be removed
+/// \param subtree tree to search for
+/// \return if any such subtrees were found
+bool Tree::helperSubtree(bool remove, const Tree* subtree) {
+    Node* inner = findSubtree(root, subtree->root);
+
+    if (!remove) {
+        return inner != nullptr;
+    }
+
+    return true;
+}
+
+
+/// Check if current tree contains a subtree
+/// \param out output stream to print the result in
+/// \param subtree tree to search for
+void Tree::containsSubtree(std::ostream &out, Tree const *subtree) {
+    if (helperSubtree(false, subtree)) {
+        out << "Yes, there is such subtree!\n";
+        return;
+    }
+    out << "No, such subtree does not exist!\n";
 }
 
 

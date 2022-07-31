@@ -44,8 +44,6 @@ public: // TODO remove line
     friend bool helperSort(Node* a, Node* b);
     void sortChildren(Node* currentRoot);
 
-    bool equalSubtrees(const Node* rootA, const Node* rootB);
-
     void moveToNextLevel(vector<Node *> &nodes) const;
 
     int readInteger(std::istream &in) const;
@@ -53,9 +51,13 @@ public: // TODO remove line
     void readLine(std::istream &in, vector<Node *> &parents) const;
     void readLineAndUpdate(std::istream &in, vector<Node *> &nodes) const;
 
+    bool printChildren(std::ostream &out, Node *parent) const;
     bool printLevel(std::ostream &out, vector<Node *> &nodes) const;
 
-    bool helperSubtree(int operation, const Tree* subtree);
+    bool helperSubtree(bool remove, const Tree* subtree);
+    bool equalSubtrees(Node const *currentRoot, Node const *otherRoot);
+
+    Node* findSubtree(Node* currentRoot, Node* rootToFind);
 
 public:
     Tree();
@@ -64,13 +66,11 @@ public:
     Tree& operator=(Tree const& other) = delete;
     ~Tree();
 
-    void containsSubtree(const Tree* subtree) const;
-    void removeSubtree(const Tree* subtree);
+    void containsSubtree(std::ostream &out, const Tree* subtree);
+    void removeSubtree(std::ostream &out, const Tree* subtree);
 
     friend std::istream& operator>>(std::istream& in, Tree& t);
     friend std::ostream& operator<<(std::ostream& out, Tree const& t);
-
-    bool printChildren(std::ostream &out, Node *parent) const;
 };
 
 
