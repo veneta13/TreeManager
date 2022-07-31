@@ -15,7 +15,7 @@ add_executable(
 
 add_executable(
         tests
-        tests/test.cpp
+        tests/test-tree.cpp
         source/trie.cpp
         source/tree.cpp
 )
