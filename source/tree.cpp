@@ -102,7 +102,7 @@ Tree::Node* Tree::getChild(Tree::Node *parent, int value) const {
 /// Add child to parent node
 /// \param parent parent to add new value under
 /// \param value child value to add
-void Tree::addChild(Tree::Node* parent, int value) {
+void Tree::addChild(Tree::Node* parent, int value) const {
     if (!getChild(parent, value)) {
         Node* node = new Node(value);
         node->parent = parent;
@@ -169,7 +169,7 @@ int Tree::readInteger(std::istream& in) const {
 /// Read all children of a node
 /// \param in stream to read from
 /// \param parent parent node to add children to
-void Tree::readChildren(std::istream& in, Node* parent) {
+void Tree::readChildren(std::istream& in, Node* parent) const {
     int current;
 
     while (true) {
@@ -197,7 +197,7 @@ void Tree::readChildren(std::istream& in, Node* parent) {
 /// Read and move reading to next nodes' children
 /// \param in stream to read from
 /// \param nodes vector to update with next nodes
-void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) {
+void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) const {
     vector<Node*> temp;
 
     readLine(in, nodes); // read child nodes of parents
@@ -215,7 +215,7 @@ void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) {
 /// Reads information for all nodes on a level and saves them
 /// \param in stream to read from
 /// \param parents parent nodes
-void Tree::readLine(std::istream& in, vector<Node*>& parents) {
+void Tree::readLine(std::istream& in, vector<Node*>& parents) const {
     char c = ' ';
     while ( c == ' ') {
         c = (char)(in.get());
@@ -236,21 +236,18 @@ void Tree::readLine(std::istream& in, vector<Node*>& parents) {
     getline(in, str); // move on to the next line
 }
 
-
-/// Read tree from input stream
-/// \param in stream to read tree from
-void Tree::read(std::istream &in) {
-    vector<Node*> nodes;
-    nodes.push_back(root);
+std::istream &operator>>(std::istream &in, Tree& t) {
+    vector<Tree::Node*> nodes;
+    nodes.push_back(t.root);
 
     while(!in.eof()) {
-        readLineAndUpdate(in, nodes);
+        t.readLineAndUpdate(in, nodes);
     }
 
     // update root
-    Node* temp = root;
-    root = root->children[0];
-    root->parent = nullptr;
+    Tree::Node* temp = t.root;
+    t.root = t.root->children[0];
+    t.root->parent = nullptr;
     delete temp;
 }
 

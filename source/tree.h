@@ -38,7 +38,7 @@ public: // TODO remove line
 
     void clear(Node* currentRoot);
     Node* getChild(Node* parent, int value) const;
-    void addChild(Node* parent, int value);
+    void addChild(Node* parent, int value) const;
 
     friend bool helperSort(Node* a, Node* b);
     void sortChildren(Node* currentRoot);
@@ -46,9 +46,9 @@ public: // TODO remove line
     bool equalSubtrees(const Node* rootA, const Node* rootB);
 
     int readInteger(std::istream &in) const;
-    void readChildren(std::istream& in, Node* parent);
-    void readLine(std::istream &in, vector<Node *> &parents);
-    void readLineAndUpdate(std::istream &in, vector<Node *> &nodes);
+    void readChildren(std::istream& in, Node* parent) const;
+    void readLine(std::istream &in, vector<Node *> &parents) const;
+    void readLineAndUpdate(std::istream &in, vector<Node *> &nodes) const;
 
 public:
     Tree();
@@ -57,10 +57,10 @@ public:
     Tree& operator=(Tree const& other) = delete;
     ~Tree();
 
-    void read(std::istream& in);
-
     void containsSubtree(const Tree* subtree) const;
     void removeSubtree(const Tree* subtree);
+
+    friend std::istream& operator>>(std::istream& in, Tree& t);
 };
 
 
