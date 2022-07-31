@@ -66,8 +66,8 @@ public:
     Tree& operator=(Tree const& other) = delete;
     ~Tree();
 
-    void containsSubtree(std::ostream &out, const Tree* subtree);
-    void removeSubtree(std::ostream &out, const Tree* subtree);
+    void containsSubtree(std::ostream &out, Tree* subtree);
+    void removeSubtree(std::ostream &out, Tree* subtree);
 
     friend std::istream& operator>>(std::istream& in, Tree& t);
     friend std::ostream& operator<<(std::ostream& out, Tree const& t);

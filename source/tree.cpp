@@ -378,7 +378,7 @@ bool Tree::helperSubtree(bool remove, const Tree* subtree) {
 /// Check if current tree contains a subtree
 /// \param out output stream to print the result in
 /// \param subtree tree to search for
-void Tree::containsSubtree(std::ostream &out, Tree const *subtree) {
+void Tree::containsSubtree(std::ostream &out, Tree *subtree) {
     if (helperSubtree(false, subtree)) {
         out << "Yes, there is such subtree!\n";
         return;
