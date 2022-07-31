@@ -35,7 +35,7 @@ bool Tree::Node::operator==(Tree::Node const &other) const {
 
 /// Default constructor
 Tree::Tree() {
-    root = new Node();
+    root = nullptr;
 }
 
 
@@ -393,6 +393,10 @@ void Tree::containsSubtree(std::ostream &out, Tree *subtree) {
 /// \return updated input stream
 std::istream &operator>>(std::istream &in, Tree& t) {
     vector<Tree::Node*> nodes;
+
+    if (!t.root) {
+         t.root = new Tree::Node();
+    }
     nodes.push_back(t.root);
 
     while(!in.eof()) {
