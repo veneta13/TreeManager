@@ -365,6 +365,8 @@ Tree::Node * Tree::findSubtree(Node* currentRoot, Node* rootToFind) {
 /// \param subtree tree to search for
 /// \return if any such subtrees were found
 bool Tree::helperSubtree(bool remove, const Tree* subtree) {
+    if (!subtree->root) { return true; }
+
     Node* inner = findSubtree(root, subtree->root);
 
     if (!remove) {
