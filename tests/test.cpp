@@ -170,4 +170,52 @@ TEST_CASE("Subtree - empty tree")
     }
 }
 
+TEST_CASE("Subtree")
+{
+    SECTION("Tree 1 and tree 2")
+    {
+        Tree t1, t2;
+        std::stringstream input1(tree1), input2(tree2), output1, output2;
+
+        input1 >> t1;
+        input2 >> t2;
+
+        t1.containsSubtree(output1, &t2);
+        t2.containsSubtree(output2, &t1);
+
+        REQUIRE(std::strcmp(output1.str().c_str(), "Yes, there is such subtree!\n") == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), "No, such subtree does not exist!\n") == 0);
+    }
+
+    SECTION("Tree 1 and tree 3")
+    {
+        Tree t1, t3;
+        std::stringstream input1(tree1), input3(tree3), output1, output2;
+
+        input1 >> t1;
+        input3 >> t3;
+
+        t1.containsSubtree(output1, &t3);
+        t3.containsSubtree(output2, &t1);
+
+        REQUIRE(std::strcmp(output1.str().c_str(), "No, such subtree does not exist!\n") == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), "No, such subtree does not exist!\n") == 0);
+    }
+
+    SECTION("Tree 2 and tree 4")
+    {
+        Tree t2, t4;
+        std::stringstream input2(tree2), input4(tree4), output1, output2;
+
+        input2 >> t2;
+        input4 >> t4;
+
+        t2.containsSubtree(output1, &t4);
+        t4.containsSubtree(output2, &t2);
+
+        REQUIRE(std::strcmp(output1.str().c_str(), "No, such subtree does not exist!\n") == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), "No, such subtree does not exist!\n") == 0);
+    }
+}
+
 #pragma clang diagnostic pop
