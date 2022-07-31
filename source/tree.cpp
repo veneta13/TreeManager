@@ -1,5 +1,13 @@
 #include "tree.h"
 
+/// Default constructor
+Tree::Node::Node() : value(0), parent(nullptr) {}
+
+
+/// Constructor with value parameter
+/// \param value value of the node
+Tree::Node::Node(int _value) : value(_value), parent(nullptr) {}
+
 
 /// Less than operator
 /// \param other node to compare to
@@ -28,6 +36,13 @@ bool Tree::Node::operator==(Tree::Node const &other) const {
 /// Default constructor
 Tree::Tree() {
     root = new Node();
+}
+
+
+/// Constructor with root value
+/// \param _root value of root
+Tree::Tree(int _root) {
+    root = new Node(_root);
 }
 
 
@@ -84,6 +99,21 @@ Tree::Node* Tree::getChild(Tree::Node *parent, int value) const {
 }
 
 
+/// Add child to parent node
+/// \param parent parent to add new value under
+/// \param value child value to add
+void Tree::addChild(Tree::Node* parent, int value) {
+    if (!getChild(parent, value)) {
+        Node* node = new Node(value);
+        node->parent = parent;
+        parent->children.push_back(node);
+    }
+    else {
+        throw std::invalid_argument("Child with such value already exists in the node!\n");
+    }
+}
+
+
 /// Helper for sortChildren function
 /// \param a node to compare
 /// \param b node to compare
@@ -98,3 +128,129 @@ bool helperSort(Tree::Node* a, Tree::Node* b) {
 void Tree::sortChildren(Node *currentRoot) {
     std::sort(currentRoot->children.begin(),currentRoot->children.end(),&helperSort);
 }
+
+
+/// Extract number from stream
+/// \param in stream to read from
+/// \return extracted number
+int Tree::readInteger(std::istream& in) const {
+    char c = ' ';
+
+    while (c == ' ') {
+        c = in.get();
+    }
+
+    bool neg = false;
+    if (c == '-') {
+        neg = true;
+        c = in.get();
+    }
+
+    if (c == '|') {
+        throw std::invalid_argument("End of children nodes reached");
+    }
+
+    if (!std::isdigit(c)) {
+        throw std::invalid_argument("Reading node from file unsuccessful!\n");
+    }
+
+    int number = 0;
+    while (std::isdigit(c)) {
+        number *= 10;
+        number += (c - '0');
+        c = in.get();
+    }
+
+    number = neg ? number * (-1) : number;
+
+    return number;
+}
+
+/// Read all children of a node
+/// \param in stream to read from
+/// \param parent parent node to add children to
+void Tree::readChildren(std::istream& in, Node* parent) {
+    int current;
+
+    while (true) {
+        try {
+            current = readInteger(in);
+        }
+        catch (std::invalid_argument& e) {
+            if (strcmp(e.what(), "End of children nodes reached") == 0) {
+                return;
+            }
+            throw e;
+        }
+
+        try {
+            addChild(parent, current);
+        }
+        catch (const std::invalid_argument& e) {
+            std::cerr << e.what();
+            throw std::invalid_argument("The tree representation in the file is invalid!\n");
+        }
+    }
+}
+
+
+/// Read and move reading to next nodes' children
+/// \param in stream to read from
+/// \param nodes vector to update with next nodes
+void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) {
+    vector<Node*> temp;
+
+    readLine(in, nodes); // read child nodes of parents
+
+    for (int i = 0; i < nodes.size(); i++) {
+        for (int j = 0; j < nodes[i]->children.size(); j++) {
+            temp.push_back(nodes[i]->children[j]);
+        }
+    }
+
+    nodes = temp;
+}
+
+
+/// Reads information for all nodes on a level and saves them
+/// \param in stream to read from
+/// \param parents parent nodes
+void Tree::readLine(std::istream& in, vector<Node*>& parents) {
+    char c = ' ';
+    while ( c == ' ') {
+        c = (char)(in.get());
+    }
+
+    if (c != '|') {
+        throw std::invalid_argument("The tree representation is not correct!\n");
+    }
+    else {
+        in.ignore(); // the structure is correct and the | can be ignored
+    }
+
+    for (int i = 0; i < parents.size(); i++) {
+        readChildren(in, parents[i]);
+    }
+
+    std::string str;
+    getline(in, str); // move on to the next line
+}
+
+
+/// Read tree from input stream
+/// \param in stream to read tree from
+void Tree::read(std::istream &in) {
+    vector<Node*> nodes;
+    nodes.push_back(root);
+
+    while(!in.eof()) {
+        readLineAndUpdate(in, nodes);
+    }
+
+    // update root
+    Node* temp = root;
+    root = root->children[0];
+    root->parent = nullptr;
+    delete temp;
+}
+
