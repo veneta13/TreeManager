@@ -37,7 +37,8 @@ public: // TODO remove line
     Node* root;
 
     void clear(Node* currentRoot);
-    Node* getChild(Node* parent, int value) const;
+    Node* getChildBinarySearch(Node* parent, int value) const;
+    Node* getChildLinearSearch(Node* parent, int value) const;
     void addChild(Node* parent, int value) const;
 
     friend bool helperSort(Node* a, Node* b);
@@ -53,6 +54,8 @@ public: // TODO remove line
     void readLineAndUpdate(std::istream &in, vector<Node *> &nodes) const;
 
     bool printLevel(std::ostream &out, vector<Node *> &nodes) const;
+
+    bool helperSubtree(int operation, const Tree* subtree);
 
 public:
     Tree();

@@ -72,7 +72,7 @@ void Tree::clear(Node *currentRoot) {
 /// \param parent parent node to search in
 /// \param value value to search for
 /// \return pointer to the child with that value
-Tree::Node* Tree::getChild(Tree::Node *parent, int value) const {
+Tree::Node* Tree::getChildBinarySearch(Tree::Node *parent, int value) const {
     if (!parent) {
         return nullptr;
     }
@@ -99,11 +99,30 @@ Tree::Node* Tree::getChild(Tree::Node *parent, int value) const {
 }
 
 
+/// Linear search for value among children of node
+/// \param parent parent node to search in
+/// \param value value to search for
+/// \return pointer to the child with that value
+Tree::Node* Tree::getChildLinearSearch(Tree::Node *parent, int value) const {
+    if (!parent) {
+        return nullptr;
+    }
+
+    for (int i = 0; i < parent->children.size(); i++) {
+        if (parent->children[i]->value == value) {
+            return parent->children[i];
+        }
+    }
+
+    return nullptr;
+}
+
+
 /// Add child to parent node
 /// \param parent parent to add new value under
 /// \param value child value to add
 void Tree::addChild(Tree::Node* parent, int value) const {
-    if (!getChild(parent, value)) {
+    if (!getChildLinearSearch(parent, value)) {
         Node* node = new Node(value);
         node->parent = parent;
         parent->children.push_back(node);
