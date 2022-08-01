@@ -14,11 +14,17 @@ add_executable(
 )
 
 add_executable(
-        tests
+        tree-tests
         tests/test-tree.cpp
+        source/tree.cpp
+)
+
+add_executable(
+        trie-tests
+        tests/test-trie.cpp
         source/trie.cpp
         source/tree.cpp
-        tests/test-trie.cpp)
+)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

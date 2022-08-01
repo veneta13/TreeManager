@@ -58,7 +58,7 @@ int Trie::getKey(char c) {
 /// \param name of the tree to add
 /// \param tree pointer to the tree to add
 /// \return if the word was added successfully
-bool Trie::add(const string& name, Tree* tree) {
+bool Trie::add(const string& name, Tree*& tree) {
     if (!root) {
         root = new Node();
     }
@@ -76,8 +76,10 @@ bool Trie::add(const string& name, Tree* tree) {
         currentNode = currentNode->keys[currentKey];
     }
 
-    delete currentNode->tree; // if there was another tree remove it
+    delete currentNode->tree;
+    currentNode->tree = nullptr;
     currentNode->tree = tree;
+    tree = nullptr;
 
     return true;
 }

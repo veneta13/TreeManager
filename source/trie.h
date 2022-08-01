@@ -35,8 +35,8 @@ public:
     Trie& operator=(Trie const&) = delete;
     ~Trie();
 
-    bool add(const string& name, Tree* tree);
-    bool search(const string& name);
+    bool add(const string& name, Tree*& tree);
+    Tree* search(const string& name);
     void clear();
 };
 
