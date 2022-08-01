@@ -33,6 +33,8 @@ public:
     Trie();
     Trie(Trie const&) = delete;
     Trie& operator=(Trie const&) = delete;
+    Trie(Trie&&) = delete;
+    Trie& operator=(Trie&&) = delete;
     ~Trie();
 
     bool add(const string& name, Tree*& tree);
