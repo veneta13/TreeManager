@@ -12,13 +12,19 @@ class Trie {
 
     /// Represents a node in the trie
     struct Node {
+
+        /// ASCII symbol lookup table
         Node *keys[TRIE_KEY_COUNT];
-        bool exists;
+
+        /// Pointer to tree with that name
+        Tree* tree;
 
         Node();
+        ~Node();
     };
 
-    Node *root; // Root node of the trie
+    /// Root node of the trie
+    Node *root;
 
     void clearSubtree(Node *currentRoot);
     int getKey(char c);
@@ -29,7 +35,7 @@ public:
     Trie& operator=(Trie const&) = delete;
     ~Trie();
 
-    bool add(const string& name);
+    bool add(const string& name, Tree* tree);
     bool search(const string& name);
     void clear();
 };

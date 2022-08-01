@@ -2,12 +2,17 @@
 
 
 /// Default constructor
-Trie::Node::Node() {
-    exists = false;
-
+Trie::Node::Node() : tree(nullptr) {
     for (int i = 0; i < TRIE_KEY_COUNT; i++) {
         keys[i] = nullptr;
     }
+}
+
+
+/// Destructor
+Trie::Node::~Node() {
+    delete tree;
+    tree = nullptr;
 }
 
 
@@ -49,11 +54,11 @@ int Trie::getKey(char c) {
 }
 
 
-
 /// Add a word to the trie
-/// \param word word to add
+/// \param name of the tree to add
+/// \param tree pointer to the tree to add
 /// \return if the word was added successfully
-bool Trie::add(const string& word) {
+bool Trie::add(const string& name, Tree* tree) {
     if (!root) {
         root = new Node();
     }
@@ -61,8 +66,8 @@ bool Trie::add(const string& word) {
     int currentKey;
     Node* currentNode = root;
 
-    for (int i = 0; i < word.size(); i++) {
-        currentKey = getKey(word[i]);
+    for (int i = 0; i < name.size(); i++) {
+        currentKey = getKey(name[i]);
 
         if (!currentNode->keys[currentKey]) {
             currentNode->keys[currentKey] = new Node();
@@ -71,33 +76,35 @@ bool Trie::add(const string& word) {
         currentNode = currentNode->keys[currentKey];
     }
 
-    currentNode->exists = true;
+    delete currentNode->tree; // if there was another tree remove it
+    currentNode->tree = tree;
+
     return true;
 }
 
 
-/// Search for name in trie
-/// \param word name to search for
-/// \return if tree with such name exists
-bool Trie::search(const string& word) {
+/// Search for tree in trie
+/// \param name name to search for
+/// \return pointer to the tree
+Tree* Trie::search(const string& name) {
     if (!root) {
-        return false;
+        return nullptr;
     }
 
     int currentKey;
     Node* currentNode = root;
 
-    for (size_t i = 0; i < word.size(); i++) {
-        currentKey = getKey(word[i]);
+    for (size_t i = 0; i < name.size(); i++) {
+        currentKey = getKey(name[i]);
 
         if (!currentNode->keys[currentKey]) {
-            return false;
+            return nullptr;
         }
 
         currentNode = currentNode->keys[currentKey];
     }
 
-    return currentNode->exists;
+    return currentNode->tree;
 }
 
 
