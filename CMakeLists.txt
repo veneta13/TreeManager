@@ -18,7 +18,7 @@ add_executable(
         tests/test-tree.cpp
         source/trie.cpp
         source/tree.cpp
-)
+        tests/test-trie.cpp)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})

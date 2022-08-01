@@ -3,7 +3,7 @@
 
 #define TRIE_KEY_COUNT 128
 
-#include <string>
+#include "tree.h"
 
 using std::string;
 
