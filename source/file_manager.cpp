@@ -19,6 +19,8 @@ void FileManager::readFile(std::ostream& out, const string& file, Tree* tree) {
 
     readFile >> *tree;
     out << "Tree read from " << file.c_str() << "\n";
+
+    readFile.close();
 }
 
 
@@ -47,4 +49,6 @@ void FileManager::writeFile(std::ostream& out, std::istream& in, const string& f
 
     writeFile << *tree;
     out << "Tree saved in file " << file.c_str() << "\n";
+
+    writeFile.close();
 }
