@@ -1,5 +1,5 @@
-#ifndef TREEMANAGER_FILEMANAGER_H
-#define TREEMANAGER_FILEMANAGER_H
+#ifndef TREEMANAGER_FILE_MANAGER_H
+#define TREEMANAGER_FILE_MANAGER_H
 
 #include <iostream>
 #include <fstream>
