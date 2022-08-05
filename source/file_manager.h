@@ -19,8 +19,8 @@ struct FileManager {
     FileManager& operator=(FileManager const& other) = delete;
     ~FileManager();
 
-    void readFile(string const &file, Tree *tree);
-    void writeFile(string const &file, Tree *tree);
+    void readFile(std::ostream& out, string const &file, Tree *tree);
+    void writeFile(std::ostream& out, std::istream& in, string const &file, Tree *tree);
 };
 
 
