@@ -13,7 +13,7 @@ using std::vector;
 
 /// Represents a tree
 class Tree {
-public: // TODO remove line
+
     /// Represents a node in the tree
     struct Node {
         /// The integer saved in the node
@@ -57,6 +57,9 @@ public: // TODO remove line
     int currentNodeSubtree(Node const *currentRoot, Node const *subtreeRoot);
     Node* findSubtree(Node* currentRoot, Node* rootToFind);
 
+    int sumChildren(Node const *parent);
+    int sumSubtree(Node const *currentRoot, Node const *subtreeRoot);
+
     void removeCurrent(Node *currentRoot, Node *subtreeRoot);
 
     bool helperSubtree(bool shouldRemove, const Tree* subtree);
@@ -73,10 +76,6 @@ public:
 
     friend std::istream& operator>>(std::istream& in, Tree& t);
     friend std::ostream& operator<<(std::ostream& out, Tree const& t);
-
-    int sumChildren(Node const *parent);
-
-    int sumSubtree(Node const *currentRoot, Node const *subtreeRoot);
 };
 
 
