@@ -68,42 +68,11 @@ void Tree::clear(Node*& currentRoot) {
 }
 
 
-/// Binary search for value among children of node
-/// \param parent parent node to search in
-/// \param value value to search for
-/// \return pointer to the child with that value
-Tree::Node* Tree::getChildBinarySearch(Tree::Node *parent, int value) const {
-    if (!parent) {
-        return nullptr;
-    }
-
-    int left = 0;
-    int right = parent->children.size() - 1;
-
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-
-        if (parent->children[mid]->value == value) {
-            return parent->children[mid];
-        }
-
-        if (parent->children[mid]->value < value) {
-            left = mid + 1;
-        }
-        else {
-            right = mid - 1;
-        }
-    }
-
-    return nullptr;
-}
-
-
 /// Linear search for value among children of node
 /// \param parent parent node to search in
 /// \param value value to search for
 /// \return pointer to the child with that value
-Tree::Node* Tree::getChildLinearSearch(Tree::Node *parent, int value) const {
+Tree::Node* Tree::getChild(Tree::Node *parent, int value) const {
     if (!parent) {
         return nullptr;
     }
@@ -122,7 +91,7 @@ Tree::Node* Tree::getChildLinearSearch(Tree::Node *parent, int value) const {
 /// \param parent parent to add new value under
 /// \param value child value to add
 void Tree::addChild(Tree::Node* parent, int value) const {
-    if (!getChildLinearSearch(parent, value)) {
+    if (!getChild(parent, value)) {
         Node* node = new Node(value);
         node->parent = parent;
         parent->children.push_back(node);
@@ -130,22 +99,6 @@ void Tree::addChild(Tree::Node* parent, int value) const {
     else {
         throw std::invalid_argument("Child with such value already exists in the node!\n");
     }
-}
-
-
-/// Helper for sortChildren function
-/// \param a node to compare
-/// \param b node to compare
-/// \return if the value of b is less than the value of a
-bool helperSort(Tree::Node* a, Tree::Node* b) {
-    return b->value < a->value;
-}
-
-
-/// Sort children nodes to improve searching
-/// \param currentRoot root to sort the children of
-void Tree::sortChildren(Node *currentRoot) {
-    std::sort(currentRoot->children.begin(),currentRoot->children.end(),&helperSort);
 }
 
 

@@ -37,12 +37,8 @@ class Tree {
     Node* root;
 
     void clear(Node*& currentRoot);
-    Node* getChildBinarySearch(Node* parent, int value) const;
-    Node* getChildLinearSearch(Node* parent, int value) const;
+    Node* getChild(Node* parent, int value) const;
     void addChild(Node* parent, int value) const;
-
-    friend bool helperSort(Node* a, Node* b);
-    void sortChildren(Node* currentRoot);
 
     void moveToNextLevel(vector<Node *> &nodes) const;
 
