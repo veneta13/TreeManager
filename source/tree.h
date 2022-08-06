@@ -36,7 +36,7 @@ class Tree {
     /// The root of the tree
     Node* root;
 
-    void clear(Node* currentRoot);
+    void clear(Node*& currentRoot);
     Node* getChildBinarySearch(Node* parent, int value) const;
     Node* getChildLinearSearch(Node* parent, int value) const;
     void addChild(Node* parent, int value) const;
@@ -54,13 +54,13 @@ class Tree {
     bool printChildren(std::ostream &out, Node *parent) const;
     bool printLevel(std::ostream &out, vector<Node *> &nodes) const;
 
-    int currentNodeSubtree(Node const *currentRoot, Node const *subtreeRoot);
-    Node* findSubtree(Node* currentRoot, Node* rootToFind);
+    int currentNodeSubtree(Node*& currentRoot, Node *subtreeRoot);
+    Node* findSubtree(Node*& currentRoot, Node* rootToFind);
 
     int sumChildren(Node const *parent);
-    int sumSubtree(Node const *currentRoot, Node const *subtreeRoot);
+    int sumSubtree(Node *& currentRoot, Node *subtreeRoot);
 
-    void removeCurrent(Node *currentRoot, Node *subtreeRoot);
+    void removeCurrent(Node*& currentRoot, Node *subtreeRoot);
 
     bool helperSubtree(bool shouldRemove, const Tree* subtree);
 

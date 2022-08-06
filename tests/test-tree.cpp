@@ -48,6 +48,14 @@ const char* tree7 = "| 8 |\n"
                     "| 11 | 4 3 | 11 | 6 |\n"
                     "| | | | | |\n";
 
+const char* tree8 = "| 2 |\n"
+                    "| 8 6 |\n"
+                    "| 2 | |\n"
+                    "| 8 6 |\n"
+                    "| 11 | |\n"
+                    "| 9 2 |\n"
+                    "| | |\n";
+
 TEST_CASE("Read and write")
 {
     SECTION("Tree 1")
@@ -290,6 +298,44 @@ TEST_CASE("Remove tree")
         REQUIRE(std::strcmp(output1.str().c_str(), answer) == 0);
         REQUIRE(std::strcmp(output2.str().c_str(), output3.str().c_str()) == 0);
 
+    }
+
+    SECTION("Recursive remove tree 2 from tree 8")
+    {
+        const char* answer = "New Tree:\n"
+                             "| |\n";
+
+        Tree t1, t2;
+
+        std::stringstream input1(tree8), input2(tree2), output1, output2;
+
+        input1 >> t1;
+        input2 >> t2;
+
+        t1.removeSubtree(output1, &t2);
+        output2 << t1;
+
+        REQUIRE(std::strcmp(output1.str().c_str(), answer) == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), "| |\n") == 0);
+    }
+
+    SECTION("Recursive remove self")
+    {
+        const char* answer = "New Tree:\n"
+                             "| |\n";
+
+        Tree t1, t2;
+
+        std::stringstream input1(tree1), input2(tree1), output1, output2;
+
+        input1 >> t1;
+        input2 >> t2;
+
+        t1.removeSubtree(output1, &t2);
+        output2 << t1;
+
+        REQUIRE(std::strcmp(output1.str().c_str(), answer) == 0);
+        REQUIRE(std::strcmp(output2.str().c_str(), "| |\n") == 0);
     }
 }
 

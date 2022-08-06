@@ -54,7 +54,7 @@ Tree::~Tree() {
 
 /// Clear subtree
 /// \param currentRoot the root of the subtree
-void Tree::clear(Node *currentRoot) {
+void Tree::clear(Node*& currentRoot) {
     if (!currentRoot) {
         return;
     }
@@ -271,6 +271,10 @@ void Tree::readLine(std::istream& in, vector<Node*>& parents) const {
 /// \param parent parent of the nodes to print
 /// \return if the node has any children
 bool Tree::printChildren(std::ostream &out, Node* parent) const {
+    if (!parent) {
+        return false;
+    }
+
     for (int i = 0; i < parent->children.size(); i++) {
         out << " " << parent->children[i]->value;
     }
@@ -324,7 +328,7 @@ int Tree::sumChildren(Tree::Node const *parent) {
 /// \param currentRoot current node in tree
 /// \param subtreeRoot root of subtree
 /// \return sum of children of all leaves of the subtree
-int Tree::sumSubtree(const Node* currentRoot, const Node* subtreeRoot) {
+int Tree::sumSubtree(Node*& currentRoot, Node* subtreeRoot) {
     bool found; // flag if the subtrees of all child nodes are found
     int sum = 0; // sum of leftover nodes
 
@@ -358,7 +362,7 @@ int Tree::sumSubtree(const Node* currentRoot, const Node* subtreeRoot) {
 /// \param currentRoot current node in tree
 /// \param subtreeRoot root of subtree
 /// \return sum of children of all leaves of the subtree
-int Tree::currentNodeSubtree(const Node* currentRoot, const Node* subtreeRoot) {
+int Tree::currentNodeSubtree(Node*& currentRoot, Node* subtreeRoot) {
     if (!currentRoot && !subtreeRoot) {
         return 0;
     }
@@ -377,10 +381,8 @@ int Tree::currentNodeSubtree(const Node* currentRoot, const Node* subtreeRoot) {
 /// \param currentRoot root of tree to search in
 /// \param rootToFind root of tree to search for
 /// \return root of subtree
-Tree::Node* Tree::findSubtree(Node* currentRoot, Node* rootToFind) {
+Tree::Node* Tree::findSubtree(Node*& currentRoot, Node* rootToFind) {
     if (!rootToFind || !currentRoot) { return nullptr; }
-
-    // TODO sort for faster operations
 
     Node* subtreeRoot; // root of found subtree
 
@@ -402,8 +404,14 @@ Tree::Node* Tree::findSubtree(Node* currentRoot, Node* rootToFind) {
 /// Remove subtree
 /// \param currentRoot root from which to remove subtree
 /// \param subtreeRoot root of tree to remove
-void Tree::removeCurrent(Node* currentRoot, Node* subtreeRoot) {
+void Tree::removeCurrent(Node*& currentRoot, Node* subtreeRoot) {
     int newNodeValue = currentNodeSubtree(currentRoot, subtreeRoot);
+
+    if (newNodeValue == 0 && !currentRoot->parent) {
+        clear(root);
+        currentRoot = nullptr;
+        return;
+    }
 
     Node* child = new Node(newNodeValue);
     child->parent = currentRoot->parent;
@@ -415,8 +423,6 @@ void Tree::removeCurrent(Node* currentRoot, Node* subtreeRoot) {
             break;
         }
     }
-
-    //TODO sort children
 }
 
 
@@ -437,7 +443,7 @@ bool Tree::helperSubtree(bool shouldRemove, const Tree* subtree) {
         return false;
     }
 
-    while (inner) {
+    while (inner && root) {
         removeCurrent(inner, subtree->root);
         inner = findSubtree(root, subtree->root);
     }
@@ -504,6 +510,11 @@ std::istream &operator>>(std::istream &in, Tree& t) {
 std::ostream &operator<<(std::ostream &out, Tree const& t) {
     vector<Tree::Node*> nodes;
     nodes.push_back(t.root);
+
+    if (!t.root) {
+        out << "| |\n";
+        return out;
+    }
 
     out << "| " << t.root->value << " |\n";
     while (t.printLevel(out, nodes)) ;
