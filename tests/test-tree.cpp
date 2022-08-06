@@ -339,4 +339,67 @@ TEST_CASE("Remove tree")
     }
 }
 
+TEST_CASE("Exceptions")
+{
+    SECTION("Add child - unrecognized symbol")
+    {
+        const char* dummy = "| 5 |\n"
+                            "| 8 6 |\n"
+                            "| g | |\n"
+                            "| 8 6 |\n"
+                            "| 11 | |\n"
+                            "| 9 2 |\n"
+                            "| | |\n";
+        Tree t;
+        std::stringstream input(dummy), output;
+
+        REQUIRE_THROWS(input >> t);
+    }
+
+    SECTION("Add child - lack of | before")
+    {
+        const char* dummy = " 5 |\n"
+                            "| 8 6 |\n"
+                            "| 4 | |\n"
+                            "| 8 6 |\n"
+                            "| 11 | |\n"
+                            "| 9 2 |\n"
+                            "| | |\n";
+        Tree t;
+        std::stringstream input(dummy), output;
+
+        REQUIRE_THROWS(input >> t);
+    }
+
+    SECTION("Add child - lack of | after")
+    {
+        const char* dummy = "| 5 \n"
+                            "| 8 6 |\n"
+                            "| 6 | |\n"
+                            "| 8 6 |\n"
+                            "| 11 | |\n"
+                            "| 9 2 |\n"
+                            "| | |\n";
+        Tree t;
+        std::stringstream input(dummy), output;
+
+        REQUIRE_THROWS(input >> t);
+    }
+
+    SECTION("Add child - mismatched child nodes")
+    {
+        const char* dummy = "| 5 |\n"
+                            "| 8 6 |\n"
+                            "| 2 |\n"
+                            "| 8 6 |\n"
+                            "| 11 | |\n"
+                            "| 9 2 |\n"
+                            "| | |\n";
+        Tree t;
+        std::stringstream input(dummy), output;
+
+        REQUIRE_THROWS(input >> t);
+    }
+}
+
 #pragma clang diagnostic pop
