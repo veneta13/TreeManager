@@ -11,6 +11,8 @@ add_executable(
         source/main.cpp
         source/trie.cpp
         source/tree.cpp
+        source/executor.cpp
+        source/file_manager.cpp
 )
 
 add_executable(

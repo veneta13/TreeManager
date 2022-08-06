@@ -243,7 +243,7 @@ void Tree::readLineAndUpdate(std::istream& in, vector<Node*>& nodes) const {
 /// \param parents parent nodes
 void Tree::readLine(std::istream& in, vector<Node*>& parents) const {
     char c = ' ';
-    while ( c == ' ') {
+    while ( c == ' ' ) {
         c = (char)(in.get());
     }
     if(in.eof()) {
