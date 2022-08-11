@@ -4,6 +4,13 @@
 
 int main() {
     Executor exec;
-    exec.enter(std::cout, std::cin);
+
+    try {
+        exec.enter(std::cout, std::cin);
+    }
+    catch (...) {
+        std::cout << "Unexpected error has occurred! Exiting...";
+    }
+
     return 0;
 }
