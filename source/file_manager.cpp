@@ -33,10 +33,13 @@ void FileManager::writeFile(std::ostream& out, std::istream& in, const string& f
         out << "File already exists.\nOverwrite existing file? y/n\n";
         char input;
         in >> input;
+        in.ignore();
         if (input != 'y') {
             out << "Writing to file cancelled.\n";
+            exists.close();
             return;
         }
+        exists.close();
     }
     out << "Writing to file " << file.c_str() << "\n";
 
